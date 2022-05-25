@@ -1,2 +1,3 @@
 # Flask Projeleri
-Projects I did during the course
+### Hello_world.py
+### Jinja.py
