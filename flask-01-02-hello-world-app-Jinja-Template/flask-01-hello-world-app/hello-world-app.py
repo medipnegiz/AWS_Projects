@@ -16,7 +16,8 @@ def third():
 
 @app.route("/forth/<string:id>")
 def forth(id):
-    return f'<h2>Id of this page is {id}</h2>' 
+    return f'<h2>Id of this page is {id}</h2>' #  browsere girilen yaziyi alt klasör olarak görür
 
 if __name__ == "__main__":
-    app.run(debug=True, port=80)    # default olarak 5000 port gelir ama istedigimiz gibi tanimlayabiliriz
+    app.run(host='0.0.0.0', port=80)    # host ile tüm dünyaya yayin yap anlamindadir
+    #app.run(debug=True, port=80)    # default olarak 5000 port gelir ama istedigimiz gibi tanimlayabiliriz
