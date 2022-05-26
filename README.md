@@ -1,3 +1,3 @@
 # Flask Projeleri
-### Hello_world.py
-### Jinja.py
+### 🔖 Hello_world.py
+### 🔖 Jinja.py
