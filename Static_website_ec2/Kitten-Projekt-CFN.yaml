@@ -1,0 +1,77 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+  This CloudFormation Template was written for
+  running Kittens Carousel Static Website on EC2.
+  Kittens Carousel Static Website will be
+  deployed on Amazon Linux 2
+  (ami-0022f774911c1d690) EC2 Instance with
+  custom security group which allows http
+  connections on port 80 and ssh port 22 from
+  anywhere. Kittens Carousel Static Website
+  is downloaded from my Public Github repository,
+  then deployed on Apache Web Server.
+
+Parameters:
+# MENSG:
+#   Description: Lütfen Security Group secin
+#   Type: AWS::EC2::SecurityGroup::Id
+
+  MENkeyPair:
+    Description: Lütfen KeyPair ciftinizi seciniz
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+  MENSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SSH ve HTTP portlari acik # Required
+      GroupName: SSHandHTTP
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: MENdenemeSG
+
+  MENec2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0022f774911c1d690
+      InstanceType: t2.micro
+      KeyName: !Ref MENkeyPair
+      SecurityGroupIds:
+        - !Ref MENSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::StackName} Stack
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install httpd -y
+        FOLDER="https://raw.githubusercontent.com/clarusway/clarusway-aws-2-22-DE/main/aws/projects/Project-101-kittens-carousel-static-website-ec2/static-web"
+        cd/var/www/html
+        wget $FOLDER/index.html
+        wget $FOLDER/cat0.jpg
+        wget $FOLDER/cat1.jpg
+        wget $FOLDER/cat2.jpg
+        wget $FOLDER/cat3.png
+        systemctl start httpd
+        systemctl enable httpd
+
+Outputs:
+  WebsiteURL:
+    Value: !Sub 
+      - http://${PublicAdress}
+      - PublicAdress: !GetAtt  MENec2.PublicDnsName
+    Description: Kittens Application URL
+
+
+
