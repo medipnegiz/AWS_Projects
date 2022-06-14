@@ -1,3 +1,3 @@
 # My Flask projects during Bootcamp 📜
-### 🔖 Hello_world.py
-### 🔖 Jinja.py
+### 🔖 Flask, HelloWorldApp, JinjaTemplate
+### 🔖 If, Handling, Routes and Get, Post Methods
