@@ -38,6 +38,8 @@ Resources:
       ImageId: ami-0cff7528ff583bf9a
       InstanceType: t2.micro
       KeyName: !Ref MENkeypair
+      SecurityGroups:
+        - !Ref MENSecurityGroup
       Tags:
         - Key: Name
           Value: !Sub Web Server of ${AWS::StackName}
@@ -47,6 +49,14 @@ Resources:
         yum install python3 -y
         pip3 install flask
         cd /home/ec2-user
-
+        wget -P templates https://raw.githubusercontent.com/medipnegiz/My_Projects/main/Roman_Numerals_Converter/templates/index.html
+        wget -P templates https://raw.githubusercontent.com/medipnegiz/My_Projects/main/Roman_Numerals_Converter/templates/result.html
+        wget https://raw.githubusercontent.com/medipnegiz/My_Projects/main/Roman_Numerals_Converter/app.py
+        python3 app.py
 
 Outputs:
+  WebSiteURL:
+    Value: !Sub 
+      - http://${PublicAddress}
+      - PublicAddress: !GetAtt MENWebServer.PublicDnsName
+    Description: Roman Numerals Converter Application URL
