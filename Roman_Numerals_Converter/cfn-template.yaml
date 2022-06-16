@@ -8,28 +8,28 @@ Parameters:
     Description: Lutfen anahtarinizi seciniz.
     Type: AWS::EC2::KeyPair::KeyName
 
-  MENSecurityGroup:
-    Description: Lutfen securit group secimini yapiniz.
-    Type: List<AWS::EC2::SecurityGroup::Id>
+  # MENSecurityGroup:
+  #   Description: Lutfen securit group secimini yapiniz.
+  #   Type: List<AWS::EC2::SecurityGroup::Id>
     
 Resources:
-  # MENSecurityGroup2:
-  #   Type: AWS::EC2::SecurityGroup
-  #   Properties:
-  #     GroupDescription: Port 22 ve 80 acik # Required
-  #     GroupName: "String"
-  #     SecurityGroupIngress:
-  #       - IpProtocol: tcp
-  #         FromPort: 22
-  #         ToPort: 22
-  #         CidrIp: 0.0.0.0/0
-  #       - IpProtocol: tcp
-  #         FromPort: 80
-  #         ToPort: 80
-  #         CidrIp: 0.0.0.0/0
-  #     Tags:
-  #       - Key: Name
-  #         Value: MENSG
+  MENSecurityGroup2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Port 22 ve 80 acik # Required
+      GroupName: "String"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: MENSG
   
   MENWebServer:
     Type: AWS::EC2::Instance
@@ -38,7 +38,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref MENkeypair
       SecurityGroups:
-        - !Ref MENSecurityGroup
+        - !Ref MENSecurityGroup2
       Tags:
         - Key: Name
           Value: !Sub Web Server of ${AWS::StackName}
