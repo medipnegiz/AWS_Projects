@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Bu Template dosyasi ile Roman Rakamlari EC2 üzerinden yayinlanacaktir.
+  (ami-0cff7528ff583bf9a) AMI kullanilmistir.
+
+Parameters:
+  MENkeypair:
+    Description: Lutfen anahtarinizi seciniz.
+    Type: AWS::EC2::KeyPair::KeyName
+
+  MENSecurityGroup:
+    Description: Lutfen securit group secimini yapiniz.
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Default: 
+    
+Resources:
+  # MENSecurityGroup2:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupDescription: Port 22 ve 80 acik # Required
+  #     GroupName: "String"
+  #     SecurityGroupIngress:
+  #       - IpProtocol: tcp
+  #         FromPort: 22
+  #         ToPort: 22
+  #         CidrIp: 0.0.0.0/0
+  #       - IpProtocol: tcp
+  #         FromPort: 80
+  #         ToPort: 80
+  #         CidrIp: 0.0.0.0/0
+  #     Tags:
+  #       - Key: Name
+  #         Value: MENSG
+  
+  MENWebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0cff7528ff583bf9a
+      InstanceType: t2.micro
+      KeyName: !Ref MENkeypair
+      Tags:
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::StackName}
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install python3 -y
+        pip3 install flask
+        cd /home/ec2-user
+
+
+Outputs:
