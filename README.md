@@ -11,3 +11,4 @@ The Roman Numerals Converter Application aims to convert the given number to the
 Purpose of the this hands-on training is to give the students introductory knowledge of how to handle forms, how to connect to database and how to use sql within Flask web application on Amazon Linux 2 EC2 instance.
 
 ### 🔖 [Phonebook_Application](https://github.com/medipnegiz/My_Projects/tree/main/Phonebook_Application)
+The Phonebook Application aims to create a phonebook application in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) using AWS Cloudformation Service.
