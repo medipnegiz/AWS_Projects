@@ -17,8 +17,157 @@ Parameters:
     Description: VPC Id of your existing account.
     Type: AWS::EC2::VPC::Id
   
+  MENKeyPair:
+    Description: Please enter your valid Key pair.
+    Type: AWS::EC2::KeyPair::KeyName
 
+  MENSubnet:
+    Description: Choose your subnets.
+    Type: List<AWS::EC2::Subnet::Id>
 
 Resources:
+  MENAppLoadBalancerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP for ALB # Required
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref MENVPC
+
+  MENInstanceSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP for Flask server and SSH for getting into EC2. # Required
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !GetAtt MENAppLoadBalancerSecGroup.GroupId
+
+        - IpProtocol: tcp
+          FromPort: 22 
+          ToPort: 22
+          CidrIp: 0.0.0.0/0 
+      VpcId: !Ref MENVPC
+
+  MENDBSecGroup:
+    Type: AWS::RDS::DBSecurityGroup
+    Properties:
+      DBSecurityGroupIngress: # Required
+        - CIDRIP: 0.0.0.0/0
+        - EC2SecurityGroupId: !GetAtt MENInstanceSecGroup.GroupId
+      GroupDescription: Front-end access to RDS # Required
+
+  MENLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-0cff7528ff583bf9a
+        InstanceType: t2.micro
+        KeyName: !Ref MENKeyPair
+        SecurityGroupIds:
+          - !GetAtt MENInstanceSecGroup.GroupId
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: !Sub Web server of ${AWS::StackName} Stack
+        UserData: 
+          Fn::Base64:
+            !Sub 
+              - |
+                #!/bin/bash -x
+                yum update -y
+                yum install python3 -y
+                yum install git -y
+                pip3 install flask
+                pip3 install flask_mysql
+                FOLDER="https://raw.githubusercontent.com/medipnegiz/My_Projects/main/Phonebook_Application/"
+                curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
+                curl -s --create-dirs -o "/home/ec2-user/templates/add-update.html" -L "$FOLDER"templates/add-update.html
+                curl -s --create-dirs -o "/home/ec2-user/templates/delete.html" -L "$FOLDER"templates/delete.html
+                curl -s --create-dirs -o "/home/ec2-user/phonebook-app.py" -L "$FOLDER"phonebook-app.py
+                echo "${MYDBURI}" > /home/ec2-user/dbserver.endpoint
+                python3 /home/ec2-user/phonebook-app.py
+              - MYDBURI: !GetAtt MENDatabaseServer.Endpoint.Address
+
+  MENTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 60
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      Tags:
+        - Key: Name
+          Value: MenTargetGroup
+      TargetType: instance
+      UnhealthyThresholdCount: 3
+      VpcId: !Ref MENVPC
   
+  MENLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Scheme: internet-facing
+      SecurityGroups:
+        - !GetAtt  MENAppLoadBalancerSecGroup.GroupId
+      Subnets: !Ref MENSubnet
+      Type: application
+
+  MENListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: 
+        - TargetGroupArn: !Ref MENTargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref MENLoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+  MENAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs 
+      DesiredCapacity: 2
+      HealthCheckGracePeriod: 300
+      HealthCheckType: ELB
+      LaunchTemplate:
+        LaunchTemplateId: !Ref MENLaunchTemplate
+        Version: !GetAtt MENLaunchTemplate.LatestVersionNumber
+      MaxSize: 3
+      MinSize: 1
+      TargetGroupARNs:
+        - !Ref MENTargetGroup
+  
+  MENDatabaseServer:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      AllocatedStorage: 20
+      AllowMajorVersionUpgrade: false
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 0
+      DBInstanceClass: db.t3.micro
+      DBInstanceIdentifier: edip-database
+      DBName: clarusway_phonebook
+      DBSecurityGroups:
+        - !Ref MENDBSecGroup
+      Engine: mysql
+      EngineVersion: 8.0.19
+      MasterUserPassword: Edip123
+      MasterUsername: admin
+      MaxAllocatedStorage: 30
+      Port: 3306
+      PubliclyAccessible: true
+
 Outputs:
+  WebsiteURL:
+    Value: !Sub 
+      - http://${ALBAddress}
+      - ALBAddress: !GetAtt MENLoadBalancer.DNSName
+    Description: Phonebook Application Load Balancer URL
