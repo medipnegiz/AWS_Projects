@@ -159,7 +159,7 @@ Resources:
         - !Ref MENDBSecGroup
       Engine: mysql
       EngineVersion: 8.0.19
-      MasterUserPassword: Edip123
+      MasterUserPassword: Edip12345
       MasterUsername: admin
       MaxAllocatedStorage: 30
       Port: 3306
