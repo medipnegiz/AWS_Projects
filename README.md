@@ -8,4 +8,6 @@ Purpose of the this hands-on training is to give the students introductory knowl
 The Roman Numerals Converter Application aims to convert the given number to the Roman numerals. The application is to be coded in Python and deployed as a web application with Flask on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation and CLI Services.
 
 ### 🔖 [Flask_Handling_SQL_with_Flask_Web_Application](https://github.com/medipnegiz/My_Projects/tree/main/Flask_Handling_SQL_with_Flask_Web_Application)
+Purpose of the this hands-on training is to give the students introductory knowledge of how to handle forms, how to connect to database and how to use sql within Flask web application on Amazon Linux 2 EC2 instance.
+
 ### 🔖 [Phonebook_Application](https://github.com/medipnegiz/My_Projects/tree/main/Phonebook_Application)
