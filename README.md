@@ -13,4 +13,4 @@ Purpose of the this hands-on training is to give the students introductory knowl
 ### 🔖 [Phonebook_Application](https://github.com/medipnegiz/My_Projects/tree/main/Phonebook_Application)
 The Phonebook Application aims to create a phonebook application in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) using AWS Cloudformation Service.
 
-### 🔖 [Kittens_Staticweb_S3_cf]()
+### 🔖 [Kittens_Staticweb_S3_cf](https://github.com/medipnegiz/My_Projects/tree/main/Kittens_Staticweb_S3_cf)
