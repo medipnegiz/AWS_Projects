@@ -14,3 +14,4 @@ Purpose of the this hands-on training is to give the students introductory knowl
 The Phonebook Application aims to create a phonebook application in Python and deployed as a web application with Flask on AWS Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) using AWS Cloudformation Service.
 
 ### 🔖 [Kittens_Staticweb_S3_cf](https://github.com/medipnegiz/My_Projects/tree/main/Kittens_Staticweb_S3_cf)
+Kittens Carousel is a static website application deployed on AWS Simple Storage Service (S3), served through Cloudfront and Route 53 using AWS Cloudformation Service.
