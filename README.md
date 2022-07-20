@@ -18,4 +18,4 @@ The Phonebook Application aims to create a phonebook application in Python and d
 ### 🔖 [Kittens_Staticweb_S3_cf](https://github.com/medipnegiz/My_Projects/tree/main/Kittens_Staticweb_S3_cf)
 Kittens Carousel is a static website application deployed on AWS Simple Storage Service (S3), served through Cloudfront and Route 53 using AWS Cloudformation Service.
 
-### 🔖 [Capstone_Project_Blog_Page_App_(Django)_on_AWS_Environment]
+### 🔖 [Capstone_Project_Blog_Page_App_(Django)_on_AWS_Environment](https://github.com/medipnegiz/My_Projects/tree/main/Capstone_Project_Blog_Page_App_(Django)_on_AWS_Environment)
