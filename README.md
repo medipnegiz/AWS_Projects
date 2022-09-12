@@ -1,4 +1,13 @@
-# My Flask projects during Bootcamp 📜
+My AWS Projects  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
+===============
+<hr>
+
+<p align="center">
+    <img alt="Python" src="https://raw.githubusercontent.com/medipnegiz/linux_cheat_sheet/main/Img/aws.svg" height="190" width="455">
+</p>
+<hr>
+
+## Index 📜
 
 ### 🔖 [Capstone_Project_Blog_Page_App_(Django)_on_AWS_Environment](https://github.com/medipnegiz/My_Projects/tree/main/Capstone_Project_Blog_Page_App_(Django)_on_AWS_Environment)
 The Clarusway Blog Page Application aims to deploy blog application as a web application written Django Framework on AWS Cloud Infrastructure. This infrastructure has Application Load Balancer with Auto Scaling Group of Elastic Compute Cloud (EC2) Instances and Relational Database Service (RDS) on defined VPC. Also, The Cloudfront and Route 53 services are located in front of the architecture and manage the traffic in secure. User is able to upload pictures and videos on own blog page and these are kept on S3 Bucket. This architecture will be created by Firms DevOps Guy.
